@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns="http://www.zenika.com/camel/notifier/model" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.zenika.com/camel/notifier/model" elementFormDefault="qualified">
+
+	<xs:element name="notifications">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="admin" />
+				<xs:element maxOccurs="unbounded" ref="user" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="admin">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="severity" />
+				<xs:element ref="message" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="user">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="type" />
+				<xs:element ref="name" />
+				<xs:element ref="title" />
+				<xs:element ref="text" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="severity">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value='INFO' />
+				<xs:enumeration value='ERROR' />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="message" type="xs:string" />
+
+	<xs:element name="type">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value='MESSAGE' />
+				<xs:enumeration value='INVITATION' />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="name" type="xs:string" />
+
+	<xs:element name="title" type="xs:string" />
+
+	<xs:element name="text" type="xs:string" />
+
+</xs:schema>

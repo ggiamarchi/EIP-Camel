@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:n="http://www.zenika.com/camel/notifier/model"
+	   xsi:schemaLocation="
+          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<camelContext xmlns="http://camel.apache.org/schema/spring">
+	
+		<route>
+			<from uri="jms:notifications.in" />
+			<to uri="log:[XML DSL - Input]?showAll=true&amp;multiline=true" />
+			<split stopOnException="false">
+				<xpath>/n:notifications/*</xpath>
+				<to uri="direct:router" />
+			</split>
+		</route>
+		
+		<route>
+			<from uri="direct:router" />
+			<to uri="log:[XML DSL - Router]?showAll=true&amp;multiline=true" />
+			<choice>
+				<when>
+					<xpath>/n:user</xpath>
+					<to uri="direct:userAggregator" />
+				</when>
+				<when>
+					<xpath>/n:admin</xpath>
+					<to uri="direct:adminFilter" />
+				</when>
+			</choice>
+		</route>
+		
+		<route>
+			<from uri="direct:userAggregator" />
+			<to uri="log:[XML DSL - User notification aggregator]?showAll=true&amp;multiline=true" />
+			<aggregate completionTimeout="5000" completionSize="10" strategyRef="aggregator">
+				<correlationExpression>
+					<xpath>/n:user/n:name</xpath>
+				</correlationExpression>
+				<convertBodyTo type="java.lang.String" />
+				<to uri="jms:notifications.user.out" />
+			</aggregate>
+		</route>
+		
+		<route>
+			<from uri="direct:adminFilter" />
+			<to uri="log:[XML DSL - Admin message filter]?showAll=true&amp;multiline=true" />
+			<filter>
+				<xpath>/n:admin/n:severity/text() = 'ERROR'</xpath>
+				<to uri="direct:adminTranslator" />
+			</filter>
+		</route>
+		
+		<route>
+			<from uri="direct:adminTranslator" />
+			<to uri="log:[XML DSL - Admin message translator]?showAll=true&amp;multiline=true" />
+			<convertBodyTo type="com.zenika.camel.notifier.model.Admin" />
+			<process ref="wrapper" />
+			<convertBodyTo type="java.lang.String" />
+			<to uri="jms:notifications.admin.out" />
+		</route>
+		
+	</camelContext>
+
+</beans>

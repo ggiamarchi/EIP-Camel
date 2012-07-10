@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<notifications xmlns="http://www.zenika.com/camel/notifier/model">
+    <admin>
+        <severity>INFO</severity>
+        <message>...</message>
+    </admin>
+    <user>
+        <type>INVITATION</type>
+        <from>Guillaume</from>
+        <to>Bob</to>
+        <title>What's next 2013</title>
+        <text>Hi Bob, you have to come to this awesome event !</text>
+    </user>
+</notifications>

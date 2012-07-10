@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<notifications xmlns="http://www.zenika.com/camel/notifier/model">
+    <admin>
+        <severity>ERROR</severity>
+        <message>Exception during processing...</message>
+    </admin>
+    <user>
+        <type>INVITATION</type>
+        <from>Guillaume</from>
+        <to>Bob</to>
+        <title>Football match next sunday</title>
+        <text>Hi all, who is available ?</text>
+    </user>
+    <user>
+        <type>INVITATION</type>
+        <from>Guillaume</from>
+        <to>Alice</to>
+        <title>Trip arround the world</title>
+        <text>We plan an amazing trip! Are you in ?</text>
+    </user>
+</notifications>

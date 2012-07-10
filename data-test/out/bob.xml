@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<notifications xmlns="http://www.zenika.com/camel/notifier/model">
+    <user>
+        <type>MESSAGE</type>
+        <from>Guillaume</from>
+        <to>Bob</to>
+        <title>What's up ?</title>
+        <text>...</text>
+    </user>
+    <user>
+        <type>INVITATION</type>
+        <from>Guillaume</from>
+        <to>Bob</to>
+        <title>What's next 2013</title>
+        <text>Hi Bob, you have to come to this awesome event !</text>
+    </user>
+    <user>
+        <type>INVITATION</type>
+        <from>Guillaume</from>
+        <to>Bob</to>
+        <title>Football match next sunday</title>
+        <text>Hi all, who is available ?</text>
+    </user>
+</notifications>

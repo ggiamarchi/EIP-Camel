@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<notifications xmlns="http://www.zenika.com/camel/notifier/model">
+    <user>
+        <type>MESSAGE</type>
+        <from>Guillaume</from>
+        <to>Alice</to>
+        <title>Rdv</title>
+        <text>Don't forget we meet tomorrow. See you soon.</text>
+    </user>
+    <user>
+        <type>INVITATION</type>
+        <from>Guillaume</from>
+        <to>Alice</to>
+        <title>Trip arround the world</title>
+        <text>We plan an amazing trip! Are you in ?</text>
+    </user>
+</notifications>

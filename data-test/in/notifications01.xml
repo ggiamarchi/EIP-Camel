@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<notifications xmlns="http://www.zenika.com/camel/notifier/model">
+    <user>
+        <type>MESSAGE</type>
+        <from>Guillaume</from>
+        <to>Bob</to>
+        <title>What's up ?</title>
+        <text>...</text>
+    </user>
+</notifications>
