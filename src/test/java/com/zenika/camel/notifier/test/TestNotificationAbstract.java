@@ -19,7 +19,6 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.util.ByteArrayInputStream;
-import org.apache.camel.CamelContext;
 import org.apache.camel.test.spring.CamelSpringJUnit4ClassRunner;
 import org.junit.Assert;
 import org.junit.Test;
@@ -46,9 +45,6 @@ public abstract class TestNotificationAbstract {
 	@Value("${jaxb.model.pkg}")
 	private String JAXB_MODEL_PKG;
 
-	@Autowired
-	private CamelContext camelContext;
-	
 	@Autowired
 	private ActiveMQConnectionFactory jmsConnectionFactory;
 
