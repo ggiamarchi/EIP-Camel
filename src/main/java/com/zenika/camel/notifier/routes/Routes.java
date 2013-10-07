@@ -2,34 +2,49 @@ package com.zenika.camel.notifier.routes;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.builder.xml.Namespaces;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import com.zenika.camel.notifier.Config;
-import com.zenika.camel.notifier.model.Admin;
-
-
+@Component("notificationRoutes")
 public class Routes extends RouteBuilder {
 
-	public static final Namespaces NS = new Namespaces("n", Config.get("jaxb.model.namespace"));
+	@Value("${jaxb.model.namespace}")
+	private String JAXB_MODEL_NAMESPACE;
+	
+	@Value("${endpoint.in}")
+	private String ENDPOINT_URI_IN;
 
-	// Endpoints URI
-	public static final String ENDPOINT_URI_IN = "jms:notifications.in";
-	public static final String ENDPOINT_URI_ROUTER = "direct:router";
-	public static final String ENDPOINT_URI_USER_AGGREGATOR = "direct:userAggregator";
-	public static final String ENDPOINT_URI_ADMIN_FILTER = "direct:adminFilter";
-	public static final String ENDPOINT_URI_ADMIN_TRANSLATOR = "direct:adminTranslator";
-	public static final String ENDPOINT_URI_USER_OUT = "jms:notifications.user.out";
-	public static final String ENDPOINT_URI_ADMIN_OUT = "jms:notifications.admin.out";
-	public static final String ENDPOINT_URI_UNKNOWN_NOTIFICATION = "jms:notifications.unknown.out";
+	@Value("${endpoint.router}")
+	private String ENDPOINT_URI_ROUTER;
+	
+	@Value("${endpoint.user.aggregator}")
+	private String ENDPOINT_URI_USER_AGGREGATOR;
+	
+	@Value("${endpoint.admin.filter}")
+	private String ENDPOINT_URI_ADMIN_FILTER;
+	
+	@Value("${endpoint.admin.translator}")
+	private String ENDPOINT_URI_ADMIN_TRANSLATOR;
+	
+	@Value("${endpoint.user.out}")
+	private String ENDPOINT_URI_USER_OUT;
+	
+	@Value("${endpoint.admin.out}")
+	private String ENDPOINT_URI_ADMIN_OUT;
+	
+	@Value("${endpoint.unknown.notification}")
+	private String ENDPOINT_URI_UNKNOWN_NOTIFICATION;
 
 	@Override
 	public void configure() throws Exception {
 
+		Namespaces NS = new Namespaces("n", JAXB_MODEL_NAMESPACE);
+
 		// Splitter
 		from(ENDPOINT_URI_IN)
 			.to(log("Input messages"))
-			.split()
-				.xpath("/n:notifications/*", NS)
-				.to(ENDPOINT_URI_ROUTER);
+			.split().xpath("/n:notifications/*", NS)
+			.to(ENDPOINT_URI_ROUTER);
 
 
 		// Content based router
@@ -52,27 +67,23 @@ public class Routes extends RouteBuilder {
 				.aggregationStrategyRef("aggregator")
 				.completionSize(10)
 				.completionTimeout(5000)
-				.convertBodyTo(String.class)
-				.to(log("BLABLA"))
-				.to(ENDPOINT_URI_USER_OUT);
+			.convertBodyTo(String.class)
+			.to(ENDPOINT_URI_USER_OUT);
 
 
 		// Filter
 		from(ENDPOINT_URI_ADMIN_FILTER)
 			.to(log("Admin message filter"))
-			.filter()
-				.xpath("/n:admin/n:severity/text() = 'ERROR'", NS)
-				.to(ENDPOINT_URI_ADMIN_TRANSLATOR);
+			.filter().xpath("/n:admin/n:severity/text() = 'ERROR'", NS)
+			.to(ENDPOINT_URI_ADMIN_TRANSLATOR);
 
 
 		// Admin messages translator
 		from(ENDPOINT_URI_ADMIN_TRANSLATOR)
 			.to(log("Admin message translator"))
-			.convertBodyTo(Admin.class)
-			.processRef("wrapper")
-			.convertBodyTo(String.class)
+			.beanRef("notificationTransformer")
 			.to(ENDPOINT_URI_ADMIN_OUT);
-
+		
 	}
 	
 	private String log(String message) {

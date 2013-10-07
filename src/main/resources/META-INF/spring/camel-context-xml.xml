@@ -38,7 +38,7 @@
 			<to uri="log:[XML DSL - User notification aggregator]?showAll=true&amp;multiline=true" />
 			<aggregate completionTimeout="5000" completionSize="10" strategyRef="aggregator">
 				<correlationExpression>
-					<xpath>/n:user/n:name</xpath>
+					<xpath>/n:user/n:to</xpath>
 				</correlationExpression>
 				<convertBodyTo type="java.lang.String" />
 				<to uri="jms:notifications.user.out" />
@@ -58,7 +58,7 @@
 			<from uri="direct:adminTranslator" />
 			<to uri="log:[XML DSL - Admin message translator]?showAll=true&amp;multiline=true" />
 			<convertBodyTo type="com.zenika.camel.notifier.model.Admin" />
-			<process ref="wrapper" />
+			<to uri="bean:notificationTransformer" />
 			<convertBodyTo type="java.lang.String" />
 			<to uri="jms:notifications.admin.out" />
 		</route>

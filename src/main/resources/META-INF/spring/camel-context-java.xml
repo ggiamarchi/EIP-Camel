@@ -5,9 +5,7 @@
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
 	<camelContext xmlns="http://camel.apache.org/schema/spring">
-		<packageScan>
-			<package>com.zenika.camel.notifier.routes</package>
-		</packageScan>
-	</camelContext>
+		<routeBuilder ref="notificationRoutes" />
+ 	</camelContext>
 
 </beans>
